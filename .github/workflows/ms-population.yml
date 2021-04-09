@@ -51,8 +51,12 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: quarkus-app
+      - name: 'Debug out'
+          run: ls -l
+      - name: 'Debug out 2'
+        run: pwd
       - name: 'Untar files'
-        run: pwd && ls -l && mkdir -p build && tar -xvf quarkus-app.tar build
+        run: mkdir -p build && tar -xvf quarkus-app.tar build
       # build + push docker img
       - name: Checkout
         uses: actions/checkout@v2

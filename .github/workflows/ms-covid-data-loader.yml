@@ -32,10 +32,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
 #    if: github.ref == 'refs/heads/master'
-    if: contains('
-      refs/heads/master
-      refs/heads/feature/ms-population_ms-covid-data-loader
-      ', github.ref)
 
     steps:
       - name: Checkout

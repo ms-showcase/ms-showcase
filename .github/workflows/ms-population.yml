@@ -52,7 +52,7 @@ jobs:
         with:
           name: quarkus-app
       - name: 'Debug out'
-          run: ls -l
+        run: ls -l
       - name: 'Debug out 2'
         run: pwd
       - name: 'Untar files'

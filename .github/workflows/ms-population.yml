@@ -52,7 +52,7 @@ jobs:
         with:
           name: quarkus-app
       - name: 'Untar files'
-        run: ls -all . && mkdir build && tar -xvf quarkus-app.tar build
+        run: mkdir build && tar -xvf ../../quarkus-app.tar build
       # build + push docker img
       - name: Checkout
         uses: actions/checkout@v2

@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew build
       # share artifact across jobs
       - name: 'Tar files'
-        run: tar -cvf quarkus-app.tar build/quarkus-app
+        run: ls -all . && tar -cvf quarkus-app.tar build/quarkus-app
       - uses: actions/upload-artifact@v2
         with:
           name: quarkus-app
@@ -52,7 +52,7 @@ jobs:
         with:
           name: quarkus-app
       - name: 'Untar files'
-        run: mkdir build && tar -xvf quarkus-app.tar build
+        run: ls -all . && mkdir build && tar -xvf quarkus-app.tar build
       # build + push docker img
       - name: Checkout
         uses: actions/checkout@v2

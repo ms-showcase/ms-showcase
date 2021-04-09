@@ -51,8 +51,8 @@ jobs:
         uses: actions/checkout@v2
       # share artifact across jobs
       - uses: actions/download-artifact@v2
-          with:
-            name: quarkus-app
+        with:
+          name: quarkus-app
       - name: 'Debug out'
         run: ls -l
       - name: 'Debug out 2'

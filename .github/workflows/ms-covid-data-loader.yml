@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./ms-population/ms-population
+    working-directory: ./ms-covid-data-loader
 
 jobs:
   #  build:

@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew build
       # share artifact across jobs
       - name: 'Tar files'
-        run: tar -cvf gradle.tar ./ms-population/ms-population/build/quarkus-app
+        run: tar -cvf quarkus-app.tar ./ms-population/ms-population/build/quarkus-app
       - uses: actions/upload-artifact@v2
         with:
           name: quarkus-app

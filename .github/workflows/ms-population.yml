@@ -33,6 +33,13 @@ jobs:
           distribution: 'adopt'
       - name: Build with Gradle
         run: ./gradlew build
+      # share artifact across jobs
+      - name: 'Tar files'
+        run: tar -cvf gradle.tar ./ms-population/ms-population/build/quarkus-app
+      - uses: actions/upload-artifact@v2
+        with:
+          name: quarkus-app
+          path: quarkus-app.tar
 
   docker:
     runs-on: ubuntu-latest
@@ -40,6 +47,15 @@ jobs:
 #    if: github.ref == 'refs/heads/master'
 
     steps:
+      # share artifact across jobs
+      - uses: actions/download-artifact@v2
+        with:
+          name: quarkus-app
+      - name: 'Untar files'
+          run: |
+            mkdir ./ms-population/ms-population/build
+            && tar -xvf quarkus-app.tar ./ms-population/ms-population/build
+      # build + push docker img
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up QEMU

@@ -47,10 +47,12 @@ jobs:
 #    if: github.ref == 'refs/heads/master'
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       # share artifact across jobs
       - uses: actions/download-artifact@v2
-        with:
-          name: quarkus-app
+          with:
+            name: quarkus-app
       - name: 'Debug out'
         run: ls -l
       - name: 'Debug out 2'
@@ -58,8 +60,6 @@ jobs:
       - name: 'Untar files'
         run: mkdir -p build && tar -xvf quarkus-app.tar build
       # build + push docker img
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx

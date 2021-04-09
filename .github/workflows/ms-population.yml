@@ -46,7 +46,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./ms-population/ms-population
           file: src/main/docker/Dockerfile.jvm
           push: true
-          tags: user/app:latest
+          tags: msshowcase/ms-population:latest

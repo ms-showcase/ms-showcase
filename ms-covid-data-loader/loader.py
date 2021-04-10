@@ -27,7 +27,7 @@ if __name__ == "__main__":
     try:
         download_csv(csvUrl, tempFile.name)
         rabbitmq = RabbitmqClient(rabbitmqHostname, rabbitmqLogin, rabbitmqPassword, 'covid19')
-        from_(DictReader(open(tempFile.name, 'r'))).subscribe( lambda row: process_row(rabbitmq, row)
+        from_(DictReader(open(tempFile.name, 'r'))).subscribe( lambda row: process_row(rabbitmq, row))
     finally:
         tempFile.close()
 

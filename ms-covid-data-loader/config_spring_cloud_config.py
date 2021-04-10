@@ -18,7 +18,7 @@ class SpringCloudConfigClient(object):
             self._config.get_config()
         except ConnectionError as ex:
             self._configDisabled = True
-            print("config server unavalable")
+            print("config server unavailable")
 
 
     def property(self, property):

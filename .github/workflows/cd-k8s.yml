@@ -29,7 +29,7 @@ jobs:
         id: wait-ms-ci
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: 'docker ${{ matrix.ms }} (ubuntu-latest)'
+          checkName: 'docker ${{ matrix.ms }}'
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           timeoutSeconds: 600
           intervalSeconds: 10

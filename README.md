@@ -2,5 +2,9 @@
 
 Running via docker compose:
 ```
-docker-compose -f docker-compose-ms.yml -f docker-compose.yml up
+docker-compose \
+-f docker-compose.yml \
+-f docker-compose-ms-covid-data-loader.yml \
+-f docker-compose-ms-population.yml \
+up
 ```

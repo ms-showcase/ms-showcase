@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+
+  ms-population-postgres:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - k8s/ms-population-postgres.properties
+
+  ms-population-adminer:
+    image: michalhosna/adminer
+    restart: always
+    ports:
+      - 8090:8080
+    env_file:
+      - k8s/ms-population-adminer.properties
+
+  ms-population:
+    image: msshowcase/ms-population
+    restart: always
+    ports:
+      - 8091:8080
+    env_file:
+      - k8s/ms-population.properties

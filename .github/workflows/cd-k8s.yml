@@ -1,0 +1,98 @@
+name: ms-showcase CD (in k8s cluster)
+
+# for IKS deployment inspiration, see:
+# https://github.com/IBM/actions-ibmcloud-iks/blob/master/.github/workflows/iks.yml
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+  IBM_CLOUD_REGION: us-south
+  IKS_CLUSTER: c1p2e7bd0vtbq7ul2e0g # name or id of cluster
+
+jobs:
+
+  wait-for-ci:
+    strategy:
+      matrix:
+        ms: [ ms-covid-data-loader, ms-population ]
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Wait for ms-population CI to Succeed
+          uses: fountainhead/action-wait-for-check@v1.0.0
+          id: wait-ms-ci
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            checkName: 'test ${{ matrix.ms }} (ubuntu-latest)'
+            ref: ${{ github.event.pull_request.head.sha || github.sha }}
+            timeoutSeconds: 600
+            intervalSeconds: 10
+
+      - name: ms-population CI Failed
+        if: steps.wait-ms-ci.outputs.conclusion != 'success'
+        shell: bash
+        run: |
+          echo "Error! The ${{ matrix.ms }} CI workflow has status of [${{steps.wait-ms-ci.outputs.conclusion}}]" 1>&2
+          exit 64
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: wait-for-ci
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install IBM Cloud CLI
+        run: |
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+          ibmcloud --version
+          ibmcloud config --check-version=false
+          ibmcloud plugin install -f kubernetes-service
+          ibmcloud plugin install -f container-registry
+
+      - name: Authenticate with IBM Cloud CLI
+        run: |
+          ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g default
+          ibmcloud cr region-set "${IBM_CLOUD_REGION}"
+          ibmcloud cr login
+
+      - name: Configure kubectl
+          run: |
+          ibmcloud ks cluster config --cluster $IKS_CLUSTER
+          kubectl config current-context
+
+      - name: Deploy ms-population-postgres
+        env:
+          DEPLOYMENT_NAME: ms-population-postgres
+          DOCKER_IMG: postgres:alpine
+          SVC_PORT: 5432
+          SVC_TYPE: clusterip
+        run: |
+          kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
+          kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG}
+          kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
+          kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT
+
+      - name: Deploy ms-population
+        env:
+          DEPLOYMENT_NAME: ms-population
+          DOCKER_IMG: msshowcase/ms-population:${{ github.sha }}
+          SVC_PORT: 5432
+          SVC_TYPE: clusterip
+        run: |
+          kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
+          kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG}
+          kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
+          kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT
+
+      - name: k8s status
+        run: |
+          kubectl get pods -o wide
+          kubectl get services -o wide

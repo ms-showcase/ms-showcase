@@ -1,4 +1,4 @@
-name: ms-population CI/CD
+name: ms-population CI
 
 on:
   push:
@@ -42,6 +42,7 @@ jobs:
           path: ms-population/ms-population/quarkus-app.tar
 
   docker:
+    name: docker ms-population
     runs-on: ubuntu-latest
     needs: build
 #    if: github.ref == 'refs/heads/master'
@@ -71,4 +72,4 @@ jobs:
           context: ./ms-population/ms-population
           file: ./ms-population/ms-population/src/main/docker/Dockerfile.jvm
           push: true
-          tags: msshowcase/ms-population:latest
+          tags: msshowcase/ms-population:${{ github.sha }},msshowcase/ms-population:latest

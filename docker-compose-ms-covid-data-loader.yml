@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+
+  ms-covid-data-loader:
+    image: msshowcase/ms-covid-data-loader
+    restart: always
+    environment:
+      RABBITMQ_HOSTNAME: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_LOGIN: guest
+      RABBITMQ_PWD: guest

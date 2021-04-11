@@ -14,7 +14,7 @@ on:
 env:
   IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
   IBM_CLOUD_REGION: us-south
-  IKS_CLUSTER: c1p2e7bd0vtbq7ul2e0g # name or id of cluster
+  IKS_CLUSTER: c1p4o3gd0g8q5mhscqrg # name or id of cluster
 
 jobs:
 

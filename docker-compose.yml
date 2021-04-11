@@ -20,16 +20,16 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+    env_file:
+      - k8s/rabbitmq.properties
 
-  mongodb:
-    image : mongo
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - MONGO_INITDB_DATABASE=podiyumm
-    ports:
-      - 27017:27017
-    restart: always
+# TODO extract to separate ms-specific file
+#  mongodb:
+#    image : mongo
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - MONGO_INITDB_DATABASE=ms-TODO
+#    ports:
+#      - 27017:27017
+#    restart: always

@@ -29,7 +29,7 @@ jobs:
         id: wait-ms-ci
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: 'test ${{ matrix.ms }} (ubuntu-latest)'
+          checkName: 'docker ${{ matrix.ms }} (ubuntu-latest)'
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           timeoutSeconds: 600
           intervalSeconds: 10
@@ -91,6 +91,28 @@ jobs:
           kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG}
           kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
           kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT
+
+      - name: Deploy rabbitmq
+        env:
+          DEPLOYMENT_NAME: rabbitmq
+          DOCKER_IMG: rabbitmq:3.8-management-alpine
+          SVC_PORT: 5672
+          SVC_TYPE: clusterip
+        run: |
+          kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
+          kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG}
+          kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
+          kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT
+
+      - name: Deploy ms-covid-data-loader
+          env:
+            DEPLOYMENT_NAME: ms-covid-data-loader
+            DOCKER_IMG: msshowcase/ms-covid-data-loader:${{ github.sha }}
+          run: |
+            kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
+            # https://crontab.guru/every-day-8am
+            kubectl create cronjob ${DEPLOYMENT_NAME} --image=${DOCKER_IMG} --schedule="0 8 * * *"
+            kubectl set env cronjob/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
 
       - name: k8s status
         run: |

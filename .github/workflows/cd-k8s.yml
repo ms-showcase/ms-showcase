@@ -25,14 +25,14 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Wait for ms-population CI to Succeed
-          uses: fountainhead/action-wait-for-check@v1.0.0
-          id: wait-ms-ci
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            checkName: 'test ${{ matrix.ms }} (ubuntu-latest)'
-            ref: ${{ github.event.pull_request.head.sha || github.sha }}
-            timeoutSeconds: 600
-            intervalSeconds: 10
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-ms-ci
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: 'test ${{ matrix.ms }} (ubuntu-latest)'
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          timeoutSeconds: 600
+          intervalSeconds: 10
 
       - name: ms-population CI Failed
         if: steps.wait-ms-ci.outputs.conclusion != 'success'
@@ -64,9 +64,9 @@ jobs:
           ibmcloud cr login
 
       - name: Configure kubectl
-          run: |
-          ibmcloud ks cluster config --cluster $IKS_CLUSTER
-          kubectl config current-context
+        run: |
+        ibmcloud ks cluster config --cluster $IKS_CLUSTER
+        kubectl config current-context
 
       - name: Deploy ms-population-postgres
         env:

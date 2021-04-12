@@ -24,7 +24,7 @@ services:
       - k8s/rabbitmq.properties
 
   ms-cloud-config:
-    image: ms-showcase/ms-cloud-config:latest
+    image: msshowcase/ms-cloud-config:latest
     restart: always
     ports:
       - "8098:8888"
@@ -32,7 +32,7 @@ services:
   #      - k8s/ms-cloud-config.properties
 
   ms-eureka-server:
-    image: ms-showcase/ms-eureka-server:latest
+    image: msshowcase/ms-eureka-server:latest
     restart: always
     ports:
       - "8099:8888"

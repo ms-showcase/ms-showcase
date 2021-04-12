@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ms-showcase-frontend
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8888
+      failFast: true

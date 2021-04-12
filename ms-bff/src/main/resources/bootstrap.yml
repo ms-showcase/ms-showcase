@@ -1,6 +1,6 @@
 spring:
   application:
-    name: msß-frontend
+    name: ms-bff
   profiles:
     active: dev
   cloud:

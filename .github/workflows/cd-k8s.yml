@@ -13,8 +13,9 @@ on:
 
 env:
   IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-  IBM_CLOUD_REGION: us-south
-  IKS_CLUSTER: c1p4o3gd0g8q5mhscqrg # name or id of cluster
+  IBM_CLOUD_REGION: eu-de
+  IBM_CLOUD_RESOURCE_GROUP: default
+  IKS_CLUSTER: ms-showcase # name or id of cluster
 
 jobs:
 
@@ -55,13 +56,13 @@ jobs:
           ibmcloud --version
           ibmcloud config --check-version=false
           ibmcloud plugin install -f kubernetes-service
-          ibmcloud plugin install -f container-registry
+#          ibmcloud plugin install -f container-registry
 
       - name: Authenticate with IBM Cloud CLI
         run: |
-          ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g default
-          ibmcloud cr region-set "${IBM_CLOUD_REGION}"
-          ibmcloud cr login
+          ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g "${IBM_CLOUD_RESOURCE_GROUP}" -a cloud.ibm.com
+#          ibmcloud cr region-set "${IBM_CLOUD_REGION}"
+#          ibmcloud cr login
 
       - name: Configure kubectl
         run: |
@@ -75,10 +76,7 @@ jobs:
           SVC_PORT: 5432
           SVC_TYPE: clusterip
         run: |
-          kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
-          kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG}
-          kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
-          kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT
+          ./k8s/create-deploy-svc.sh
 
       - name: Deploy ms-population
         env:
@@ -87,10 +85,7 @@ jobs:
           SVC_PORT: 5432
           SVC_TYPE: clusterip
         run: |
-          kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
-          kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG}
-          kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
-          kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT
+          ./k8s/create-deploy-svc.sh
 
       - name: Deploy rabbitmq
         env:
@@ -99,20 +94,14 @@ jobs:
           SVC_PORT: 5672
           SVC_TYPE: clusterip
         run: |
-          kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
-          kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG}
-          kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
-          kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT
+          ./k8s/create-deploy-svc.sh
 
       - name: Deploy ms-covid-data-loader
         env:
           DEPLOYMENT_NAME: ms-covid-data-loader
           DOCKER_IMG: msshowcase/ms-covid-data-loader:${{ github.sha }}
         run: |
-          kubectl create configmap ${DEPLOYMENT_NAME} --from-file=k8s/${DEPLOYMENT_NAME}.properties
-          # https://crontab.guru/every-day-8am
-          kubectl create cronjob ${DEPLOYMENT_NAME} --image=${DOCKER_IMG} --schedule="0 8 * * *"
-          kubectl set env cronjob/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME}
+          ./k8s/create-cronjob.sh
 
       - name: k8s status
         run: |

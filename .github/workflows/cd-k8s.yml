@@ -77,13 +77,13 @@ jobs:
 
       # do we want to deploy eureka in the k8s?
       - name: Deploy ms-eureka-server
-          env:
-            DEPLOYMENT_NAME: ms-eureka-server
-            DOCKER_IMG: msshowcase/ms-eureka-server:${{ github.sha }}
-            SVC_PORT: 8888
-            SVC_TYPE: clusterip
-          run: |
-            ./k8s/create-deploy-svc.sh
+        env:
+          DEPLOYMENT_NAME: ms-eureka-server
+          DOCKER_IMG: msshowcase/ms-eureka-server:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
 
       - name: Deploy ms-population-postgres
         env:

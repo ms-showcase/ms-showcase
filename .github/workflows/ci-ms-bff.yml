@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew build
       # share artifact across jobs
       - name: 'Tar files'
-        run: tar -cvf app.tar build/lib
+        run: tar -cvf app.tar build/libs
       - uses: actions/upload-artifact@v2
         with:
           name: app

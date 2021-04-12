@@ -24,12 +24,12 @@ services:
       - k8s/rabbitmq.properties
 
 # TODO extract to separate ms-specific file
-#  mongodb:
-#    image : mongo
-#    environment:
-#      - PUID=1000
-#      - PGID=1000
-#      - MONGO_INITDB_DATABASE=ms-TODO
-#    ports:
-#      - 27017:27017
-#    restart: always
+  mongodb:
+    image : mongo
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MONGO_INITDB_DATABASE=ms-TODO
+    ports:
+      - 27017:27017
+    restart: always

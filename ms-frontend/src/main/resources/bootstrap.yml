@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-showcase-covid
+    name: msß-frontend
   profiles:
     active: dev
   cloud:

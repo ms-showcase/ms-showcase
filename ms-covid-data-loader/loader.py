@@ -18,7 +18,7 @@ def download_csv(url, filename):
 if __name__ == "__main__":
     sccc = SpringCloudConfigClient('ms-covid-data-loader')
     rabbitmqHostname = os.getenv('RABBITMQ_HOSTNAME') or sccc.property('rabbitmq.hostname') or 'localhost'
-    rabbitmqHostname = os.getenv('RABBITMQ_PORT') or sccc.property('rabbitmq.port') or '5672'
+    rabbitmqPort = os.getenv('RABBITMQ_PORT') or sccc.property('rabbitmq.port') or '5672'
     rabbitmqLogin = os.getenv('RABBITMQ_LOGIN') or sccc.property('rabbitmq.login') or 'guest'
     rabbitmqPassword = os.getenv('RABBITMQ_PWD') or sccc.property('rabbitmq.password') or 'guest'
     csvUrl = os.getenv('CSV_URL') or sccc.property('csv.url') or 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     tempFile = tempfile.NamedTemporaryFile()
     try:
         download_csv(csvUrl, tempFile.name)
-        rabbitmq = RabbitmqClient(rabbitmqHostname, rabbitmqLogin, rabbitmqPassword, 'covid19')
+        rabbitmq = RabbitmqClient(rabbitmqHostname, rabbitmqPort, rabbitmqLogin, rabbitmqPassword, 'covid19')
         from_(DictReader(open(tempFile.name, 'r'))).subscribe( lambda row: process_row(rabbitmq, row))
     finally:
         tempFile.close()

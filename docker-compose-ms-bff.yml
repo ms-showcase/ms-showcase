@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+
+  ms-covid:
+    image: msshowcase/ms-bff
+    restart: always
+    ports:
+      - 8093:8080

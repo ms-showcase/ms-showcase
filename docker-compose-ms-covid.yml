@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+
+  ms-covid-mongo:
+    image : mongo
+    env_file:
+      - k8s/ms-covid-mongo.properties
+    ports:
+      - 27017:27017
+    restart: always
+
+  ms-covid:
+    image: msshowcase/ms-covid
+    restart: always
+    ports:
+      - 8092:8080

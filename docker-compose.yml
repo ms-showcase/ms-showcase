@@ -23,13 +23,18 @@ services:
     env_file:
       - k8s/rabbitmq.properties
 
-# TODO extract to separate ms-specific file
-  mongodb:
-    image : mongo
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - MONGO_INITDB_DATABASE=ms-TODO
-    ports:
-      - 27017:27017
+  ms-cloud-config:
+    image: ms-showcase/ms-cloud-config:latest
     restart: always
+    ports:
+      - "8098:8888"
+  #    env_file:
+  #      - k8s/ms-cloud-config.properties
+
+  ms-eureka-server:
+    image: ms-showcase/ms-eureka-server:latest
+    restart: always
+    ports:
+      - "8099:8888"
+#    env_file:
+#      - k8s/ms-eureka-server.properties

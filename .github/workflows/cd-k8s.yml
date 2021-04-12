@@ -22,7 +22,7 @@ jobs:
   wait-for-ci:
     strategy:
       matrix:
-        ms: [ ms-covid-data-loader, ms-population ]
+        ms: [ ms-covid-data-loader, ms-population, ms-cloud-config, ms-eureka-server, ms-covid, ms-bff ]
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Wait for ms-population CI to Succeed
@@ -56,18 +56,34 @@ jobs:
           ibmcloud --version
           ibmcloud config --check-version=false
           ibmcloud plugin install -f kubernetes-service
-#          ibmcloud plugin install -f container-registry
 
       - name: Authenticate with IBM Cloud CLI
         run: |
           ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g "${IBM_CLOUD_RESOURCE_GROUP}" -a cloud.ibm.com
-#          ibmcloud cr region-set "${IBM_CLOUD_REGION}"
-#          ibmcloud cr login
 
       - name: Configure kubectl
         run: |
           ibmcloud ks cluster config --cluster $IKS_CLUSTER
           kubectl config current-context
+
+      - name: Deploy ms-cloud-config
+        env:
+          DEPLOYMENT_NAME: ms-cloud-config
+          DOCKER_IMG: msshowcase/ms-cloud-config:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      # do we want to deploy eureka in the k8s?
+      - name: Deploy ms-eureka-server
+          env:
+            DEPLOYMENT_NAME: ms-eureka-server
+            DOCKER_IMG: msshowcase/ms-eureka-server:${{ github.sha }}
+            SVC_PORT: 8888
+            SVC_TYPE: clusterip
+          run: |
+            ./k8s/create-deploy-svc.sh
 
       - name: Deploy ms-population-postgres
         env:
@@ -102,6 +118,34 @@ jobs:
           DOCKER_IMG: msshowcase/ms-covid-data-loader:${{ github.sha }}
         run: |
           ./k8s/create-cronjob.sh
+
+      - name: Deploy ms-covid-mongo
+        env:
+          DEPLOYMENT_NAME: ms-covid-mongo
+          DOCKER_IMG: mongo
+          SVC_PORT: 27017
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-covid
+        env:
+          DEPLOYMENT_NAME: ms-covid
+          DOCKER_IMG: msshowcase/ms-covid:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-bff
+        env:
+          DEPLOYMENT_NAME: ms-bff
+          DOCKER_IMG: msshowcase/ms-bff:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: NodePort
+          SVC_NODEPORT: 31234
+        run: |
+          ./k8s/create-deploy-svc.sh
 
       - name: k8s status
         run: |

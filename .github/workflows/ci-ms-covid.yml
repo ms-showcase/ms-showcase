@@ -55,7 +55,7 @@ jobs:
         with:
           name: app
       - name: 'Untar files'
-        run: mkdir -p build && tar -xvf ../../app.tar build
+        run: mkdir -p build && tar -xvf ../app.tar build
       # build + push docker img
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

@@ -142,7 +142,7 @@ jobs:
           DEPLOYMENT_NAME: ms-bff
           DOCKER_IMG: msshowcase/ms-bff:${{ github.sha }}
           SVC_PORT: 8888
-          SVC_TYPE: NodePort
+          SVC_TYPE: nodeport
           SVC_NODEPORT: 31234
         run: |
           ./k8s/create-deploy-svc.sh

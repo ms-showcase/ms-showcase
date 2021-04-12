@@ -39,10 +39,10 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: app
-          path: ms-cloud-covid/app.tar
+          path: ms-cloud-config/app.tar
 
   docker:
-    name: docker ms-cloud-covid
+    name: docker ms-cloud-config
     runs-on: ubuntu-latest
     needs: build
 #    if: github.ref == 'refs/heads/master'
@@ -69,6 +69,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./ms-cloud-covid
+          context: ./ms-cloud-config
           push: true
-          tags: msshowcase/ms-cloud-covid:${{ github.sha }},msshowcase/ms-cloud-covid:latest
+          tags: msshowcase/ms-cloud-config:${{ github.sha }},msshowcase/ms-cloud-config:latest

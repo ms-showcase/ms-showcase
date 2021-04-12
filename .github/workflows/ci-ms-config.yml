@@ -1,4 +1,4 @@
-name: ms-config CI
+name: ms-cloud-config CI
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./ms-config
+    working-directory: ./ms-cloud-config
 
 jobs:
   build:
@@ -39,10 +39,10 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: app
-          path: ms-config/app.tar
+          path: ms-cloud-covid/app.tar
 
   docker:
-    name: docker ms-config
+    name: docker ms-cloud-covid
     runs-on: ubuntu-latest
     needs: build
 #    if: github.ref == 'refs/heads/master'
@@ -69,6 +69,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./ms-config
+          context: ./ms-cloud-covid
           push: true
-          tags: msshowcase/ms-config:${{ github.sha }},msshowcase/ms-config:latest
+          tags: msshowcase/ms-cloud-covid:${{ github.sha }},msshowcase/ms-cloud-covid:latest

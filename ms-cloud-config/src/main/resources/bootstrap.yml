@@ -6,7 +6,7 @@ management:
 
 spring:
   application:
-    name: ms-showcase-configserver
+    name: ms-cloud-config
   cloud:
     config:
       server:

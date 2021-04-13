@@ -22,7 +22,7 @@ jobs:
   wait-for-ci:
     strategy:
       matrix:
-        ms: [ ms-covid-data-loader, ms-population, ms-cloud-config, ms-eureka-server, ms-covid, ms-bff ]
+        ms: [ ms-covid-data-loader, ms-population, ms-cloud-config, ms-covid, ms-bff ]
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Wait for ms-population CI to Succeed
@@ -70,16 +70,6 @@ jobs:
         env:
           DEPLOYMENT_NAME: ms-cloud-config
           DOCKER_IMG: msshowcase/ms-cloud-config:${{ github.sha }}
-          SVC_PORT: 8888
-          SVC_TYPE: clusterip
-        run: |
-          ./k8s/create-deploy-svc.sh
-
-      # do we want to deploy eureka in the k8s?
-      - name: Deploy ms-eureka-server
-        env:
-          DEPLOYMENT_NAME: ms-eureka-server
-          DOCKER_IMG: msshowcase/ms-eureka-server:${{ github.sha }}
           SVC_PORT: 8888
           SVC_TYPE: clusterip
         run: |

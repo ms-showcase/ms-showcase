@@ -30,11 +30,3 @@ services:
       - "8098:8888"
   #    env_file:
   #      - k8s/ms-cloud-config.properties
-
-  ms-eureka-server:
-    image: msshowcase/ms-eureka-server:latest
-    restart: always
-    ports:
-      - "8099:8888"
-#    env_file:
-#      - k8s/ms-eureka-server.properties

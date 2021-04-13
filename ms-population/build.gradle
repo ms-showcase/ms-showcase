@@ -11,7 +11,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.fmcejudo:quarkus-eureka:0.0.10'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-resteasy-jackson'
     implementation 'io.quarkus:quarkus-smallrye-openapi'

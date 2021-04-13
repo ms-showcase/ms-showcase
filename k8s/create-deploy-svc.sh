@@ -2,7 +2,7 @@
 set -e
 
 # if prop file not empty
-if [ -s k8s/${DEPLOYMENT_NAME}.properties ]; then
+if [ ! -s k8s/${DEPLOYMENT_NAME}.properties ]; then
   kubectl create configmap ${DEPLOYMENT_NAME} --from-env-file=k8s/${DEPLOYMENT_NAME}.properties --dry-run=client -o yaml \
     > ${DEPLOYMENT_NAME}-cm.yaml && kubectl apply -f ${DEPLOYMENT_NAME}-cm.yaml
 fi
@@ -11,7 +11,7 @@ kubectl create deployment ${DEPLOYMENT_NAME} --image=${DOCKER_IMG} --dry-run=cli
   > ${DEPLOYMENT_NAME}-deploy.yaml && kubectl apply -f ${DEPLOYMENT_NAME}-deploy.yaml
 
 # if prop file not empty
-if [ -s k8s/${DEPLOYMENT_NAME}.properties ]; then
+if [ ! -s k8s/${DEPLOYMENT_NAME}.properties ]; then
   kubectl set env deployment/${DEPLOYMENT_NAME} --from configmap/${DEPLOYMENT_NAME} --dry-run=client -o yaml \
     > ${DEPLOYMENT_NAME}-deploy-cm.yaml && kubectl apply -f ${DEPLOYMENT_NAME}-deploy-cm.yaml
 fi

@@ -27,6 +27,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-opentracing'
     implementation 'io.opentracing.contrib:opentracing-jdbc'
 
+    implementation 'io.quarkus:quarkus-spring-cloud-config-client'
+
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 }

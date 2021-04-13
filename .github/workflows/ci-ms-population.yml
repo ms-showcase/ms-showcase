@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./ms-population/ms-population
+    working-directory: ./ms-population
 
 jobs:
   build:
@@ -39,7 +39,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: quarkus-app
-          path: ms-population/ms-population/quarkus-app.tar
+          path: ms-population/quarkus-app.tar
 
   docker:
     name: docker ms-population
@@ -69,7 +69,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./ms-population/ms-population
-          file: ./ms-population/ms-population/src/main/docker/Dockerfile.jvm
+          context: ./ms-population
+          file: ./ms-population/src/main/docker/Dockerfile.jvm
           push: true
           tags: msshowcase/ms-population:${{ github.sha }},msshowcase/ms-population:latest

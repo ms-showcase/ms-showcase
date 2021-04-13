@@ -24,7 +24,6 @@ dependencies {
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
 
     implementation 'io.quarkus:quarkus-smallrye-opentracing'
-    implementation 'io.opentracing.contrib:opentracing-jdbc'
 
     implementation 'io.quarkus:quarkus-spring-cloud-config-client'
 

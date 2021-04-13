@@ -27,6 +27,6 @@ services:
     image: msshowcase/ms-cloud-config:latest
     restart: always
     ports:
-      - "8098:8888"
-  #    env_file:
-  #      - k8s/ms-cloud-config.properties
+      - "8888:8888"
+    env_file:
+      - k8s/ms-cloud-config.properties

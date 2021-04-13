@@ -148,19 +148,6 @@ quarkus.jaeger.endpoint=http://localhost:14268/api/traces
 quarkus.log.console.format=%d{HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n
 ```
 
-
-1. Eureka integration
-
-```
-./gradlew addExtension --extensions=com.github.fmcejudo:quarkus-eureka:0.0.10
-./gradlew addExtension --extensions=quarkus-rest-client
-```
-
-Extend `build.gradle` with:
-```
-implementation 'io.quarkus:quarkus-rest-client'
-```
-
 1. spring cloud config integration
 
 ```

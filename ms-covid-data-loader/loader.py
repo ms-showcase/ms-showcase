@@ -1,5 +1,6 @@
 import os
 from rabbitmq_client import RabbitmqClient
+from config_spring_cloud_config import SpringCloudConfigClient
 from csv import DictReader
 from rx import from_
 import requests
@@ -15,11 +16,11 @@ def download_csv(url, filename):
         f.write(results.content)
 
 if __name__ == "__main__":
-    # sccc = SpringCloudConfigClient('ms-covid-data-loader')
-    rabbitmqHostname = os.getenv('RABBITMQ_HOSTNAME')  or 'localhost'
-    rabbitmqPort = os.getenv('RABBITMQ_PORT')  or '5672'
-    rabbitmqLogin = os.getenv('RABBITMQ_LOGIN')  or 'guest'
-    rabbitmqPassword = os.getenv('RABBITMQ_PWD')  or 'guest'
+    sccc = SpringCloudConfigClient()
+    rabbitmqHostname = os.getenv('RABBITMQ_HOSTNAME') or sccc.property('spring.rabbitmq.host') or 'localhost'
+    rabbitmqPort = os.getenv('RABBITMQ_PORT') or sccc.property('spring.rabbitmq.port') or '5672'
+    rabbitmqLogin = os.getenv('RABBITMQ_LOGIN') or sccc.property('spring.rabbitmq.username') or 'guest'
+    rabbitmqPassword = os.getenv('RABBITMQ_PWD') or sccc.property('spring.rabbitmq.password') or 'guest'
     csvUrl = os.getenv('CSV_URL')  or 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
 
     tempFile = tempfile.NamedTemporaryFile()

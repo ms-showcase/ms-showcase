@@ -1,0 +1,11 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: {{ DEPLOYMENT_NAME }}
+          livenessProbe:
+            httpGet:
+              path: {{ LIVENESS_PROBE }}
+              port: {{ SVC_PORT }}
+            initialDelaySeconds: 1
+            periodSeconds: 3

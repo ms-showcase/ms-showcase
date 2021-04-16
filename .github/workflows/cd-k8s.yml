@@ -91,7 +91,7 @@ jobs:
           SVC_PORT: 8080
           SVC_TYPE: clusterip
           LIVENESS_PROBE: "/q/health/live"
-          READYNESS_PROBE: "/q/health/ready"
+          READINESS_PROBE: "/q/health/ready"
         run: |
           ./k8s/create-deploy-svc.sh
 

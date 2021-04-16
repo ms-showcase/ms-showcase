@@ -17,3 +17,13 @@ else
   kubectl create service $SVC_TYPE ${DEPLOYMENT_NAME} --tcp=$SVC_PORT:$SVC_PORT --dry-run=client -o yaml \
     > ${DEPLOYMENT_NAME}-svc.yaml && kubectl apply -f ${DEPLOYMENT_NAME}-svc.yaml
 fi
+
+if [ ! -z "${LIVENESS_PROBE}" ]; then
+#  cat k8s/patch-livenessprobe.yml | k8s/mo
+  cat k8s/patch-livenessprobe.yml | k8s/mo | kubectl patch deployment ${DEPLOYMENT_NAME} --patch "$(cat)"
+fi
+
+if [ ! -z "${READINESS_PROBE}" ]; then
+#  cat k8s/patch-readinessprobe.yml | k8s/mo
+  cat k8s/patch-readinessprobe.yml | k8s/mo | kubectl patch deployment ${DEPLOYMENT_NAME} --patch "$(cat)"
+fi

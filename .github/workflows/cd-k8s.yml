@@ -57,6 +57,14 @@ jobs:
           ibmcloud config --check-version=false
           ibmcloud plugin install -f kubernetes-service
 
+      # to enable act usage https://github.com/nektos/act
+      - name: Install kubectl tooling
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+          echo "$(<kubectl.sha256) kubectl" | sha256sum --check
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
       - name: Authenticate with IBM Cloud CLI
         run: |
           ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g "${IBM_CLOUD_RESOURCE_GROUP}" -a cloud.ibm.com
@@ -73,8 +81,6 @@ jobs:
           SVC_PORT: 16686
           SVC_TYPE: clusterip
           KUBECTL_SVC_ARGS: "--tcp=5778:5778 --tcp=14268:14268 --tcp=14250:14250 --tcp=9411:9411"
-          LIVENESS_PROBE: "/"
-          READINESS_PROBE: "/"
         run: |
           ./k8s/create-deploy-svc.sh
 

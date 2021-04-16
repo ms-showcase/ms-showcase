@@ -72,6 +72,8 @@ jobs:
           DOCKER_IMG: msshowcase/ms-cloud-config:${{ github.sha }}
           SVC_PORT: 8888
           SVC_TYPE: clusterip
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
         run: |
           ./k8s/create-deploy-svc.sh
 
@@ -126,6 +128,8 @@ jobs:
           DOCKER_IMG: msshowcase/ms-covid:${{ github.sha }}
           SVC_PORT: 8888
           SVC_TYPE: clusterip
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
         run: |
           ./k8s/create-deploy-svc.sh
 
@@ -136,6 +140,8 @@ jobs:
           SVC_PORT: 8888
           SVC_TYPE: nodeport
           SVC_NODEPORT: 31234
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
         run: |
           ./k8s/create-deploy-svc.sh
 

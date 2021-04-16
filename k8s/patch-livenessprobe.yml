@@ -7,5 +7,5 @@ spec:
             httpGet:
               path: {{ LIVENESS_PROBE }}
               port: {{ SVC_PORT }}
-            initialDelaySeconds: 1
-            periodSeconds: 3
+            initialDelaySeconds: 15
+            periodSeconds: 30

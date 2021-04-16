@@ -13,7 +13,9 @@ services:
       - 5778:5778
       - 16686:16686
       - 14268:14268
-
+    env_file:
+      - k8s/jaeger.properties
+      -
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
     restart: always

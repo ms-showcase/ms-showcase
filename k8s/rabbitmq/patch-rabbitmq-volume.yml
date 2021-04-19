@@ -1,13 +1,15 @@
 spec:
   template:
     spec:
-      volumeMounts:
-        - name: "rabbitmq-config"
-          mountPath: "/etc/rabbitmq/rabbitmq.conf"
-          subPath: "rabbitmq.conf"
-        - name: "rabbitmq-config"
-          mountPath: "/etc/rabbitmq/definitions.json"
-          subPath: "definitions.json"
+      containers:
+        - name: {{ DEPLOYMENT_NAME }}
+          volumeMounts:
+          - name: "rabbitmq-config"
+            mountPath: "/etc/rabbitmq/rabbitmq.conf"
+            subPath: "rabbitmq.conf"
+          - name: "rabbitmq-config"
+            mountPath: "/etc/rabbitmq/definitions.json"
+            subPath: "definitions.json"
       restartPolicy: Always
       volumes:
         - name: "rabbitmq-config"

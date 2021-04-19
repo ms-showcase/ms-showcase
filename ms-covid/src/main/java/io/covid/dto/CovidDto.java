@@ -1,5 +1,6 @@
 package io.covid.dto;
 
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.ToString;
@@ -10,7 +11,7 @@ public class CovidDto {
     @JsonProperty("iso_code")
     private String isoCode;
     @JsonProperty("date")
-    private String date;
+    private LocalDate date;
     @JsonProperty("continent")
     private String continent;
     @JsonProperty("location")

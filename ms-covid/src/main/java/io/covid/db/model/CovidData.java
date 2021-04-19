@@ -1,14 +1,21 @@
 package io.covid.db.model;
 
+import java.time.LocalDate;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CovidData {
     @Id
     private String isoCodeAndDate;
+    private String isoCode;
+    private LocalDate date;
     private String continent;
     private String location;
     private String totalCases;

@@ -1,5 +1,6 @@
 package io.covid.rest;
 
+import java.util.List;
 import java.util.Optional;
 import io.covid.db.model.CovidData;
 import io.covid.service.CovidDataService;
@@ -21,8 +22,22 @@ public class CovidDataController {
     }
 
     @GetMapping(path = "/data/{id}")
-    public ResponseEntity<CovidData> find(@PathVariable("id") final String id){
+    public ResponseEntity<CovidData> findById(@PathVariable("id") final String id){
         Optional<CovidData> covidData = covidDataService.searchByCovidDataId(id);
+        return covidData.map(data -> new ResponseEntity<>(data, HttpStatus.OK))
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+    }
+
+    @GetMapping(path = "/data/lastweek/{iso}/{date}")
+    public ResponseEntity<List<CovidData>> findWeekOldRecords(@PathVariable("iso") final String iso,@PathVariable("date") final String date){
+        Optional<List<CovidData>> covidData = covidDataService.findWeekOldRecordsByDateAndIso(iso, date);
+        return covidData.map(data -> new ResponseEntity<>(data, HttpStatus.OK))
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+    }
+
+    @GetMapping(path = "/data/isocodes")
+    public ResponseEntity<List<String>> isoCodes(){
+        Optional<List<String>> covidData = covidDataService.fetchDistinctIsoCode();
         return covidData.map(data -> new ResponseEntity<>(data, HttpStatus.OK))
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }

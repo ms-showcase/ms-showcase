@@ -1,5 +1,6 @@
 package io.covid.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import io.covid.db.model.CovidData;
 import io.covid.db.repository.CovidDataRepository;
@@ -22,4 +23,13 @@ public class CovidDataServiceImpl implements CovidDataService {
     public Optional<CovidData> searchByCovidDataId(final String id) {
         return covidDataRepository.findById(id);
     }
+
+    @Override public Optional<List<CovidData>> findWeekOldRecordsByDateAndIso(String iso, String date) {
+        return Optional.of(covidDataRepository.findWeekOldRecordsByDateAndIso(iso, date));
+    }
+
+    @Override public Optional<List<String>> fetchDistinctIsoCode() {
+        return Optional.of(covidDataRepository.findDistinctIsoCode());
+    }
+
 }

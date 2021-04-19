@@ -123,6 +123,7 @@ jobs:
           SVC_TYPE: clusterip
         run: |
           ./k8s/create-deploy-svc.sh
+          ./k8s/rabbitmq/create-rabbitmq-config.sh
 
       - name: Deploy ms-covid-data-loader
         env:

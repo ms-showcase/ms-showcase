@@ -22,15 +22,19 @@
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           Select country
         </button>
-        <ul class="dropdown-menu scrollable-menu" id="covid-countries" aria-labelledby="dropdownMenuButton1">
+        <ul class="dropdown-menu scrollable-menu" id="covid-countries" aria-labelledby="dropdownMenuButton1" onchange="loadStatistics()">
         </ul>
       </div>
+      <div id="chart" style="min-height: 365px;"></div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="countries.js"></script>
+    <script src="chart.js"></script>
+    <script src="statistics.js"></script>
   </body>
 </html>

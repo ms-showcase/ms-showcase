@@ -29,4 +29,9 @@ public class CovidDataController {
     public ResponseEntity<String> isoCodes(){
         return new ResponseEntity<>(feignService.isoCodes(), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/data/statistics/{iso}")
+    public ResponseEntity<String> lastYearStatistics(@PathVariable("iso") final String iso){
+        return new ResponseEntity<>(feignService.lastYearStatistics(iso), HttpStatus.OK);
+    }
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "ms-covid", url = "127.0.0.1:8080")
+@FeignClient(name = "ms-covid", url = "127.0.0.1:8889")
 public interface CovidDataFeignService {
     @RequestMapping(value = "data/{id}", method = RequestMethod.GET)
     String findById(@PathVariable("id") String id);
@@ -15,4 +15,7 @@ public interface CovidDataFeignService {
 
     @RequestMapping(value = "data/isocodes", method = RequestMethod.GET)
     String isoCodes();
+
+    @RequestMapping(value = "data/statistics/{iso}", method = RequestMethod.GET)
+    String lastYearStatistics(@PathVariable("iso") final String iso);
 }

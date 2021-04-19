@@ -18,4 +18,8 @@ $(document).ready(function () {
         })
     });
     $(dropdown).find('temp').remove();
+    $('#covid-countries').click(function () {
+        loadStatistics();
+    });
+
 });

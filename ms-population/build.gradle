@@ -16,21 +16,19 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-openapi'
     implementation 'io.quarkus:quarkus-resteasy'
     implementation 'io.quarkus:quarkus-arc'
-
     implementation 'io.quarkus:quarkus-flyway'
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
-
     implementation 'io.quarkus:quarkus-hibernate-orm-rest-data-panache'
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
-
     implementation 'io.quarkus:quarkus-smallrye-opentracing'
-
+    implementation 'io.opentracing.contrib:opentracing-jdbc'
     implementation 'io.quarkus:quarkus-spring-cloud-config-client'
-
     implementation 'io.quarkus:quarkus-smallrye-health'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.testcontainers:testcontainers:1.15.3'
+    testImplementation 'org.testcontainers:postgresql:1.15.3'
 }
 
 group 'io.msdemo'

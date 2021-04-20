@@ -1,5 +1,5 @@
 function loadStatistics() {
-    var url = 'http://127.0.0.1:8998/data/statistics/CAN';
+    var url = '/data/statistics/CAN';
 
     $.getJSON(url, function (response) {
         ApexCharts.exec('covid-chart', 'updateOptions', {

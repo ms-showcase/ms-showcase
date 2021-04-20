@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     dropdown.prop('selectedIndex', 0);
 
-    const url = 'http://127.0.0.1:8998/data/isocodes';
+    const url = '/data/isocodes';
 
     $.getJSON(url, function (data) {
         $.each(data, function (key, entry) {

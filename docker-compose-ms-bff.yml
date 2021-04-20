@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  ms-covid:
+  ms-bff:
     image: msshowcase/ms-bff
     restart: always
     ports:

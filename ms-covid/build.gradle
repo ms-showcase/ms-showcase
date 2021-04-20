@@ -25,6 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'io.opentracing.contrib:opentracing-spring-jaeger-web-starter:3.3.1'
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.20'
@@ -44,4 +45,9 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
+}
+
+project.configurations.compile.resolvedConfiguration.resolvedArtifacts.each {
+    println it.name // << the artifact name
+    println it.file // << the file reference
 }

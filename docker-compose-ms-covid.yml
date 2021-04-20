@@ -14,4 +14,6 @@ services:
     image: msshowcase/ms-covid
     restart: always
     ports:
-      - 8092:8080
+      - 8092:8888
+    env_file:
+      - k8s/ms-covid.properties

@@ -23,9 +23,12 @@ services:
       - "15672:15672"
     env_file:
       - k8s/rabbitmq.properties
+    volumes:
+      - ./k8s/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./k8s/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
 
   ms-cloud-config:
-    image: msshowcase/ms-cloud-config:latest
+    image: msshowcase/ms-cloud-config
     restart: always
     ports:
       - "8888:8888"

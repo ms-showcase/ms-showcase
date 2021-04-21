@@ -32,6 +32,9 @@ if __name__ == "__main__":
     sccc = SpringCloudConfigClient()
     rabbitmqHostname = os.getenv('RABBITMQ_HOSTNAME') or sccc.property('spring.rabbitmq.host') or 'localhost'
     rabbitmqPort = os.getenv('RABBITMQ_PORT') or sccc.property('spring.rabbitmq.port') or '5672'
+    print("os.getenv('RABBITMQ_PORT')" + os.getenv('RABBITMQ_PORT'))
+    print("sccc.property('spring.rabbitmq.port')" + sccc.property('spring.rabbitmq.port'))
+    print("rabbitmqPort" + rabbitmqPort)
     rabbitmqLogin = os.getenv('RABBITMQ_LOGIN') or sccc.property('spring.rabbitmq.username') or 'guest'
     rabbitmqPassword = os.getenv('RABBITMQ_PWD') or sccc.property('spring.rabbitmq.password') or 'guest'
     csvUrl = os.getenv('CSV_URL')  or 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'

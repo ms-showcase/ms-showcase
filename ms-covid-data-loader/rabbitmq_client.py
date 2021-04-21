@@ -14,9 +14,6 @@ class RabbitmqClient(object):
         self.setup()
 
     def setup(self):
-        print("DEBUG: hostname: " + self._hostname)
-        print("DEBUG: port: " + self._port)
-
         if self._hostname:
             credentials = pika.PlainCredentials(self._username, self._pwd)
             self._connection = pika.BlockingConnection(pika.ConnectionParameters(self._hostname, self._port, '/', credentials))

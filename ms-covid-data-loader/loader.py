@@ -11,7 +11,7 @@ from py_zipkin.encoding import Encoding
 zipkinUrl = ""
 
 def process_row(rabbitmq, row):
-    if row['continent'] == 'Europe':
+    if row['iso_code'] in ['SVK', 'CZE', 'DEU', 'GBR']:
         print("{0}\t{1}".format(row['iso_code'], row['date']))
         rabbitmq.publish(row)
 

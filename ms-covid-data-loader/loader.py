@@ -11,8 +11,9 @@ from py_zipkin.encoding import Encoding
 zipkinUrl = ""
 
 def process_row(rabbitmq, row):
-    print("{0}\t{1}".format(row['iso_code'], row['date']))
-    rabbitmq.publish(row)
+    if row['continent'] == 'Europe':
+        print("{0}\t{1}".format(row['iso_code'], row['date']))
+        rabbitmq.publish(row)
 
 def download_csv(url, filename):
     results = requests.get(url)

@@ -56,7 +56,6 @@ jobs:
         run: |
           NODEPORT=$(kubectl get -o jsonpath="{.spec.ports[0].nodePort}" services $EXPOSED_SERVICE_NAME)
           NODE=$(kubectl get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="ExternalIP")].address }')
-#          cp -R ms-bff/src/main/resources/public docs
           find docs -name '*.js' -exec sed -i "s|###URL###|http://$NODE:$NODEPORT|g" {} \;
 
       - name: Deploy 🚀

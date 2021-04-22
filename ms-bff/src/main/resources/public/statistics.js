@@ -1,5 +1,5 @@
-function loadStatistics() {
-    var url = '/data/statistics/CAN';
+function loadStatistics(iso) {
+    var url = '/data/statistics/' + iso;
 
     $.getJSON(url, function (response) {
         ApexCharts.exec('covid-chart', 'updateOptions', {

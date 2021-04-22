@@ -1,6 +1,7 @@
 package io.covid.service.impl;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,6 +14,7 @@ import io.covid.dto.CovidStatistics;
 import io.covid.dto.chart.ChartData;
 import io.covid.dto.chart.Series;
 import io.covid.service.CovidDataService;
+import io.covid.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,12 +50,9 @@ public class CovidDataServiceImpl implements CovidDataService {
                 .collect(groupingBy(covidData1 -> covidData1.getDate().getMonth())).values()
                 .stream().map(data -> data.stream().reduce(
                     (covidData1, covidData2) -> CovidData.builder().date(covidData1.getDate())
-                        .icuPatients(String.valueOf(Float.parseFloat(covidData1.getIcuPatients()) + Float
-                            .parseFloat(covidData2.getIcuPatients()))).newCases(String.valueOf(
-                            Float.parseFloat(covidData1.getNewCases()) + Float
-                                .parseFloat(covidData2.getNewCases()))).newDeaths(String.valueOf(
-                            Float.parseFloat(covidData1.getNewDeaths()) + Float
-                                .parseFloat(covidData2.getNewDeaths()))).build()))
+                        .icuPatients(Utils.sum(covidData1.getIcuPatients(), covidData2.getIcuPatients()))
+                        .newCases(Utils.sum(covidData1.getNewCases(), covidData2.getNewCases()))
+                        .newDeaths(Utils.sum(covidData1.getNewDeaths(), covidData2.getNewDeaths())).build()))
                 .map(Optional::get).collect(toList());
 
             List<CovidStatistics> covidStats = collect.stream()

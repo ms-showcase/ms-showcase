@@ -40,4 +40,10 @@ public class CovidDataController {
     public ResponseEntity<String> lastYearStatistics(@PathVariable("iso") final String iso){
         return new ResponseEntity<>(feignService.lastYearStatistics(iso), HttpStatus.OK);
     }
+
+    @CrossOrigin(origins = "https://ms-showcase.github.io")
+    @GetMapping(path = "/circuitBreaker")
+    public ResponseEntity<String> circuitBreaker(){
+        return new ResponseEntity<>(feignService.circuitBreakerExample(), HttpStatus.OK);
+    }
 }

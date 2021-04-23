@@ -1,6 +1,8 @@
 package io.msdemo.feign;
 
+import java.util.concurrent.CompletableFuture;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.msdemo.dto.PopulationDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
@@ -14,10 +16,11 @@ public interface PopulationFeignService {
 
     @RequestMapping(value = "population/{iso}", method = RequestMethod.GET)
     @CircuitBreaker(name = "ms-population", fallbackMethod = "populationFallback")
-    PopulationDto population(@PathVariable("iso") String iso);
+    @TimeLimiter(name = "ms-population")
+    CompletableFuture<PopulationDto> population(@PathVariable("iso") String iso);
 
-    default PopulationDto populationFallback(Throwable throwable){
-        return PopulationDto.builder().country("N/A").countryCode("N/A").population("N/A").build();
+    default CompletableFuture<PopulationDto> populationFallback(Throwable throwable){
+        return CompletableFuture.completedFuture(PopulationDto.builder().country("N/A").countryCode("N/A").population("N/A").build());
     }
 
 }

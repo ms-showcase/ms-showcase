@@ -1,6 +1,7 @@
 package io.msdemo.controller;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import io.msdemo.dto.PopulationDto;
 import io.msdemo.feign.PopulationFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ public class PopulationController {
     }
 
     @GetMapping(path = "/population/{iso}")
-    public ResponseEntity<PopulationDto> population(@PathVariable("iso") final String iso){
-        CompletableFuture<PopulationDto> population = populationFeignService.population(iso);
-        return new ResponseEntity<>(population.join(), HttpStatus.OK);
+    public ResponseEntity<PopulationDto> population(@PathVariable("iso") final String iso)
+        throws ExecutionException, InterruptedException {
+        return new ResponseEntity<>(populationFeignService.population(iso).get(), HttpStatus.OK);
     }
 }
 

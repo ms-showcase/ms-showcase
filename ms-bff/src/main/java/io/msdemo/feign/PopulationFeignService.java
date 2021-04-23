@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface PopulationFeignService {
 
     @RequestMapping(value = "population/{iso}", method = RequestMethod.GET)
-    @CircuitBreaker(name = "ms-population"/*, fallbackMethod = "populationFallback"*/)
+    @CircuitBreaker(name = "ms-population", fallbackMethod = "populationFallback")
     PopulationDto population(@PathVariable("iso") String iso);
 
     default PopulationDto populationFallback(Throwable throwable){

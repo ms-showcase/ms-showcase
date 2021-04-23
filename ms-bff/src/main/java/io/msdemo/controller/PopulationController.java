@@ -1,5 +1,6 @@
 package io.msdemo.controller;
 
+import io.msdemo.dto.PopulationDto;
 import io.msdemo.feign.PopulationFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,8 @@ public class PopulationController {
     }
 
     @GetMapping(path = "/population/{iso}")
-    public ResponseEntity<String> population(@PathVariable("iso") final String iso){
-        String population = populationFeignService.population(iso);
+    public ResponseEntity<PopulationDto> population(@PathVariable("iso") final String iso){
+        PopulationDto population = populationFeignService.population(iso);
         return new ResponseEntity<>(population, HttpStatus.OK);
     }
 }

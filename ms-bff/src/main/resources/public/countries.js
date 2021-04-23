@@ -28,8 +28,8 @@ $(document).ready(function () {
             $('#country').text(data.country);
 
             var population = data.population;
-            if (Number.isInteger(population)) {
-                population = Number(population).toFixed(2) + " mil";
+            if (!isNaN(parseInt(population))) {
+                population = Number(parseInt(population)/1000000).toFixed(2) + " mil";
             }
             $('#population').text(population);
         });

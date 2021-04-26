@@ -5,8 +5,10 @@ $(document).ready(function () {
 
     dropdown.prop('selectedIndex', 0);
 
-    const url = '/data/isocodes';
-    const urlPopulation = '/population/';
+    const url = 'http://159.122.175.61:31234/data/isocodes';
+    const urlPopulation = 'http://159.122.175.61:31234/population/';
+
+
 
     $.getJSON(url, function (data) {
         $.each(data, function (key, entry) {
@@ -24,7 +26,12 @@ $(document).ready(function () {
         loadStatistics(iso);
         $.getJSON(urlPopulation + iso, function (data) {
             $('#country').text(data.country);
-            $('#population').text(data.population);
+
+            var population = data.population;
+            if (!isNaN(parseInt(population))) {
+                population = Number(parseInt(population)/1000000).toFixed(2) + " mil";
+            }
+            $('#population').text(population);
         });
     });
 

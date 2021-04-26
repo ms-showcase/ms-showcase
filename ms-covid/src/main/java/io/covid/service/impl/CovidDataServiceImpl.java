@@ -47,7 +47,7 @@ public class CovidDataServiceImpl implements CovidDataService {
         if(statistics.isPresent()){
             List<CovidData> covidData = statistics.get();
             List<CovidData> collect = covidData.stream()
-                .collect(groupingBy(covidData1 -> covidData1.getDate().getMonth())).values()
+                .collect(groupingBy(covidData1 -> covidData1.getDate().getMonth()+"_"+covidData1.getDate().getYear())).values()
                 .stream().map(data -> data.stream().reduce(
                     (covidData1, covidData2) -> CovidData.builder().date(covidData1.getDate())
                         .icuPatients(Utils.sum(covidData1.getIcuPatients(), covidData2.getIcuPatients()))

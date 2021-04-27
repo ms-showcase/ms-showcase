@@ -35,12 +35,11 @@ public class CovidDataController {
     @Operation(summary = "Get last week CovidData for a specified country")
     @GetMapping(path = "/data/lastweek/{iso}/{date}")
     public ResponseEntity<List<CovidData>> findWeekOldRecords(
-        @ApiParam(name = "ISO code of a country", allowableValues = "CZE, SVK, GBR, DEU")
+        @ApiParam(name = "ISO code of a country")
         @PathVariable("iso") final String iso,
         @ApiParam(name = "Upper bound of the date range") @PathVariable("date") final String date) {
         Optional<List<CovidData>> covidData =
             covidDataService.findWeekOldRecordsByDateAndIso(iso, date);
-        covidDataService.lastYearStatistics(iso);
         return covidData.map(data -> new ResponseEntity<>(data, HttpStatus.OK))
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
@@ -54,9 +53,9 @@ public class CovidDataController {
 
     @Operation(summary = "Get last year CovidData for a specified country")
     @GetMapping(path = "/data/statistics/{iso}") public ResponseEntity<Series> isoCodes(
-        @ApiParam(name = "ISO code of a country", allowableValues = "CZE, SVK, GBR, DEU")
+        @ApiParam(name = "ISO code of a country")
         @PathVariable("iso") final String iso) {
         Series covidData = covidDataService.lastYearStatistics(iso);
-        return new ResponseEntity<Series>(covidData, HttpStatus.OK);
+        return new ResponseEntity<>(covidData, HttpStatus.OK);
     }
 }

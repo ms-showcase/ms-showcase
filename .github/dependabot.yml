@@ -7,26 +7,26 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "gradle"
-      directory: "/ms-bff"
-      schedule:
-        interval: "daily"
+    directory: "/ms-bff"
+    schedule:
+      interval: "daily"
 
   - package-ecosystem: "gradle"
-      directory: "/ms-cloud-config"
-      schedule:
-        interval: "daily"
+    directory: "/ms-cloud-config"
+    schedule:
+      interval: "daily"
 
   - package-ecosystem: "gradle"
-      directory: "/ms-covid"
-      schedule:
-        interval: "daily"
+    directory: "/ms-covid"
+    schedule:
+      interval: "daily"
 
   - package-ecosystem: "gradle"
-      directory: "/ms-population"
-      schedule:
-        interval: "daily"
+    directory: "/ms-population"
+    schedule:
+      interval: "daily"
 
   - package-ecosystem: "pip"
-      directory: "/ms-covid-data-loader"
-      schedule:
-        interval: "daily"
+    directory: "/ms-covid-data-loader"
+    schedule:
+      interval: "daily"

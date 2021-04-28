@@ -1,0 +1,20 @@
+server:
+  port: 8888
+
+management:
+  context-path: /admin
+
+spring:
+  application:
+    name: ms-cloud-config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ms-showcase/ms-configuration
+          # The git repo will be cloned to this directory
+#          basedir: target/config
+          # within the cloned git repo search for properties in this directory
+          searchPaths: configuration
+          default-label: master
+

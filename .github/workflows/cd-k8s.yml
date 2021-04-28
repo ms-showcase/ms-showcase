@@ -1,0 +1,170 @@
+name: ms-showcase CD (in k8s cluster)
+
+# for IKS deployment inspiration, see:
+# https://github.com/IBM/actions-ibmcloud-iks/blob/master/.github/workflows/iks.yml
+
+on:
+  push:
+    branches:
+      - master
+#  pull_request:
+#    branches:
+#      - master
+
+env:
+  IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+  IBM_CLOUD_REGION: eu-de
+  IBM_CLOUD_RESOURCE_GROUP: default
+  IKS_CLUSTER: ms-showcase # name or id of cluster
+
+jobs:
+
+  wait-for-ci:
+    strategy:
+      matrix:
+        ms: [ ms-covid-data-loader, ms-population, ms-cloud-config, ms-covid, ms-bff ]
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Wait for ms-population CI to Succeed
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-ms-ci
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: 'docker ${{ matrix.ms }}'
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          timeoutSeconds: 600
+          intervalSeconds: 10
+
+      - name: ms-population CI Failed
+        if: steps.wait-ms-ci.outputs.conclusion != 'success'
+        shell: bash
+        run: |
+          echo "Error! The ${{ matrix.ms }} CI workflow has status of [${{steps.wait-ms-ci.outputs.conclusion}}]" 1>&2
+          exit 64
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: wait-for-ci
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install IBM Cloud CLI
+        run: |
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+          ibmcloud --version
+          ibmcloud config --check-version=false
+          ibmcloud plugin install -f kubernetes-service
+
+      # to enable act usage https://github.com/nektos/act
+      - name: Install kubectl tooling
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+          echo "$(<kubectl.sha256) kubectl" | sha256sum --check
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      - name: Authenticate with IBM Cloud CLI
+        run: |
+          ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g "${IBM_CLOUD_RESOURCE_GROUP}" -a cloud.ibm.com
+
+      - name: Configure kubectl
+        run: |
+          ibmcloud ks cluster config --cluster $IKS_CLUSTER
+          kubectl config current-context
+
+      - name: Deploy jaeger UI
+        env:
+          DEPLOYMENT_NAME: jaeger
+          DOCKER_IMG: jaegertracing/all-in-one:1.22
+          SVC_PORT: 16686
+          SVC_TYPE: clusterip
+          KUBECTL_SVC_ARGS: "--tcp=5778:5778 --tcp=14268:14268 --tcp=14250:14250 --tcp=9411:9411"
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-cloud-config
+        env:
+          DEPLOYMENT_NAME: ms-cloud-config
+          DOCKER_IMG: msshowcase/ms-cloud-config:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: clusterip
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-population-postgres
+        env:
+          DEPLOYMENT_NAME: ms-population-postgres
+          DOCKER_IMG: postgres:alpine
+          SVC_PORT: 5432
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-population
+        env:
+          DEPLOYMENT_NAME: ms-population
+          DOCKER_IMG: msshowcase/ms-population:${{ github.sha }}
+          SVC_PORT: 8080
+          SVC_TYPE: clusterip
+          LIVENESS_PROBE: "/q/health/live"
+          READINESS_PROBE: "/q/health/ready"
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy rabbitmq
+        env:
+          DEPLOYMENT_NAME: rabbitmq
+          DOCKER_IMG: rabbitmq:3.8-management-alpine
+          SVC_PORT: 5672
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+          ./k8s/rabbitmq/create-rabbitmq-config.sh
+
+      - name: Deploy ms-covid-data-loader
+        env:
+          DEPLOYMENT_NAME: ms-covid-data-loader
+          DOCKER_IMG: msshowcase/ms-covid-data-loader:${{ github.sha }}
+        run: |
+          ./k8s/create-cronjob.sh
+
+      - name: Deploy ms-covid-mongo
+        env:
+          DEPLOYMENT_NAME: ms-covid-mongo
+          DOCKER_IMG: mongo
+          SVC_PORT: 27017
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-covid
+        env:
+          DEPLOYMENT_NAME: ms-covid
+          DOCKER_IMG: msshowcase/ms-covid:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: clusterip
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-bff
+        env:
+          DEPLOYMENT_NAME: ms-bff
+          DOCKER_IMG: msshowcase/ms-bff:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: nodeport
+          SVC_NODEPORT: 31234
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: k8s status
+        run: |
+          kubectl get pods -o wide
+          kubectl get services -o wide

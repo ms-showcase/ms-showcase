@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+
+  ms-bff:
+    image: msshowcase/ms-bff
+    restart: always
+    ports:
+      - 8093:8888
+    env_file:
+      - k8s/ms-bff.properties

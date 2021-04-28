@@ -1,0 +1,65 @@
+name: Deploy docs
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+  IBM_CLOUD_REGION: eu-de
+  IBM_CLOUD_RESOURCE_GROUP: default
+  IKS_CLUSTER: ms-showcase # name or id of cluster
+  EXPOSED_SERVICE_NAME: ms-bff
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+
+      - name: Install IBM Cloud CLI
+        run: |
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+          ibmcloud --version
+          ibmcloud config --check-version=false
+          ibmcloud plugin install -f kubernetes-service
+
+      # to enable act usage https://github.com/nektos/act
+      - name: Install kubectl tooling
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+          echo "$(<kubectl.sha256) kubectl" | sha256sum --check
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      - name: Authenticate with IBM Cloud CLI
+        run: |
+          ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g "${IBM_CLOUD_RESOURCE_GROUP}" -a cloud.ibm.com
+
+      - name: Configure kubectl
+        run: |
+          ibmcloud ks cluster config --cluster $IKS_CLUSTER
+          kubectl config current-context
+
+      - name: Install site 🔧
+        run: |
+          NODEPORT=$(kubectl get -o jsonpath="{.spec.ports[0].nodePort}" services $EXPOSED_SERVICE_NAME)
+          NODE=$(kubectl get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="ExternalIP")].address }')
+          find docs -name '*.html' -exec sed -i "s|###URL###|http://$NODE:$NODEPORT|g" {} \;
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.1
+        with:
+          branch: docs # The branch the action should deploy to.
+          folder: docs # The folder the action should deploy.

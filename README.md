@@ -4,7 +4,7 @@
 
 To have up-to-date docker images, run:
 ```
-docker-compose \
+docker compose \
 -f docker-compose.yml \
 -f docker-compose-ms-covid.yml \
 -f docker-compose-ms-covid-data-loader.yml \
@@ -14,7 +14,7 @@ pull
 ```
 and then run the services via:
 ```
-docker-compose \
+docker compose \
 -f docker-compose.yml \
 -f docker-compose-ms-covid.yml \
 -f docker-compose-ms-covid-data-loader.yml \

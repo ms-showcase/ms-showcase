@@ -5,9 +5,9 @@ name: ms-showcase CD (in k8s cluster)
 
 on:
   push:
-    branches:
-      - master
-#  pull_request:
+    # no k8s cluster to push to => ignoring
+    branches-ignore:
+      - '**'
 #    branches:
 #      - master
 

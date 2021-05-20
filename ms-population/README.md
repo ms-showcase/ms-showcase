@@ -1,5 +1,14 @@
 # Quarkus based Microservice from scratch
 
+## Prerequisites
+Installed:
+* jdk (for example from: https://adoptopenjdk.net/installation.html)
+* maven (https://maven.apache.org/install.html)
+* gradle (https://gradle.org/install/)
+
+## Intro
+Quarkus - https://quarkus.io/
+
 ## Create project
 
 inspiration:
@@ -28,14 +37,11 @@ cd ms-population
 * Swagger UI: http://localhost:8080/openapi-ui/index.html
 * Test: PopulationResourceTest
 
-## Develop Test
+## Test Driven Development
 
-
-* test driven
-    * all java country codes are covered
-    * API available
-    * API docs are available
-
+Make sure that:
+    * Slovak Republic population is accessible via API.
+    * List of countries whose population is provided is accessible via API.
 
 ## Add data
 
@@ -130,27 +136,4 @@ import io.quarkus.hibernate.orm.rest.data.panache.PanacheRepositoryResource;
 
 public interface PopulationResource extends PanacheRepositoryResource<PopulationRepository, Population, String> {
 }
-```
-
-1. opentracing support
-
-```
-./gradlew addExtension --extensions=com.github.fmcejudo:smallrye-opentracing
-```
-
-Extend `application.properties` with:
-```
-quarkus.jaeger.service-name=ms-population
-quarkus.jaeger.sampler-type=const
-quarkus.jaeger.sampler-param=1
-quarkus.jaeger.endpoint=http://localhost:14268/api/traces
-#quarkus.log.console.format=%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n
-quarkus.log.console.format=%d{HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n
-```
-
-1. spring cloud config integration
-
-```
-./gradlew addExtension --extensions=spring-cloud-config-client
-
 ```

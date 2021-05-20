@@ -9,8 +9,11 @@ env:
 
 on:
   push:
-    branches:
-      - master
+    # no k8s cluster to push to => ignoring
+    branches-ignore:
+      - '**'
+#    branches:
+#      - master
 #  pull_request:
 #    branches:
 #      - master

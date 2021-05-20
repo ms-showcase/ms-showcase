@@ -5,9 +5,8 @@ $(document).ready(function () {
 
     dropdown.prop('selectedIndex', 0);
 
-    const url = 'http://159.122.175.61:31234/data/isocodes';
-    const urlPopulation = 'http://159.122.175.61:31234/population/';
-
+    const url = '/data/isocodes';
+    const urlPopulation = '/population/';
 
 
     $.getJSON(url, function (data) {

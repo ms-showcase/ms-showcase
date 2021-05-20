@@ -40,8 +40,9 @@ cd ms-population
 ## Test Driven Development
 
 Make sure that:
-    * Slovak Republic population is accessible via API.
-    * List of countries whose population is provided is accessible via API.
+
+* Slovak Republic population is accessible via API.
+* List of countries whose population is provided is accessible via API.
 
 ## Add data
 

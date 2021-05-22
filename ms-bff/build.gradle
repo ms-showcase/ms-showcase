@@ -28,18 +28,16 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
     implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
 
-    compile "io.github.resilience4j:resilience4j-circuitbreaker:${resilience4jVersion}"
-    compile "io.github.resilience4j:resilience4j-ratelimiter:${resilience4jVersion}"
-    compile "io.github.resilience4j:resilience4j-retry:${resilience4jVersion}"
-    compile "io.github.resilience4j:resilience4j-bulkhead:${resilience4jVersion}"
-    compile "io.github.resilience4j:resilience4j-cache:${resilience4jVersion}"
-    compile "io.github.resilience4j:resilience4j-timelimiter:${resilience4jVersion}"
+    implementation "io.github.resilience4j:resilience4j-circuitbreaker:${resilience4jVersion}"
+    implementation "io.github.resilience4j:resilience4j-ratelimiter:${resilience4jVersion}"
+    implementation "io.github.resilience4j:resilience4j-retry:${resilience4jVersion}"
+    implementation "io.github.resilience4j:resilience4j-bulkhead:${resilience4jVersion}"
+    implementation "io.github.resilience4j:resilience4j-cache:${resilience4jVersion}"
+    implementation "io.github.resilience4j:resilience4j-timelimiter:${resilience4jVersion}"
 
-    compile "io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}"
-    compile('org.springframework.boot:spring-boot-starter-aop')
+    implementation "io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}"
+    implementation('org.springframework.boot:spring-boot-starter-aop')
 
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

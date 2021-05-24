@@ -111,6 +111,7 @@ import lombok.Data;
 public class Population {
     private String country;
     @Id
+    @Column(name = "country_code")
     private String countryCode;
     private long population;
 }

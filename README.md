@@ -22,3 +22,9 @@ docker compose \
 -f docker-compose-ms-bff.yml \
 up
 ```
+
+## Using the app
+
+Once started:
+* ms-showcase is accessible at: http://localhost:8093/ and
+* Jaeger UI accessible at: http://localhost:16686/ .

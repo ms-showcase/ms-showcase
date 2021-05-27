@@ -67,7 +67,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v2.4.0
+        uses: docker/build-push-action@v2.5.0
         with:
           context: ./ms-population
           file: ./ms-population/src/main/docker/Dockerfile.jvm

@@ -19,6 +19,27 @@ on:
       - master
 
 jobs:
+
+  wait-for-cd-ms-bff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for ms-bff CD to Succeed
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-ms-cd
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: 'Deploy ms-bff'
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          timeoutSeconds: 600
+          intervalSeconds: 10
+
+      - name: ms-population CI Failed
+        if: steps.wait-ms-cd.outputs.conclusion != 'success'
+        shell: bash
+        run: |
+          echo "Error! The ms-bff CD workflow has status of [${{steps.wait-ms-cd.outputs.conclusion}}]" 1>&2
+          exit 64
+
   build-and-deploy:
     runs-on: ubuntu-latest
 

@@ -6,10 +6,13 @@ name: ms-showcase CD (in k8s cluster)
 on:
   push:
     # no k8s cluster to push to => ignoring
-    branches-ignore:
-      - '**'
-#    branches:
-#      - master
+#    branches-ignore:
+#      - '**'
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 env:
   IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}

@@ -3,6 +3,9 @@ server:
 
 management:
   context-path: /admin
+  health:
+    probes:
+      enabled: true
 
 spring:
   application:

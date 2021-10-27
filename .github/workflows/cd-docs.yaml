@@ -10,13 +10,13 @@ env:
 on:
   push:
     # no k8s cluster to push to => ignoring
-    branches-ignore:
-      - '**'
-#    branches:
-#      - master
-#  pull_request:
-#    branches:
-#      - master
+#    branches-ignore:
+#      - '**'
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build-and-deploy:

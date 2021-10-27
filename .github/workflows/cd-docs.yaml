@@ -41,6 +41,7 @@ jobs:
           exit 64
 
   build-and-deploy:
+    needs: wait-for-cd-ms-bff
     runs-on: ubuntu-latest
 
     steps:

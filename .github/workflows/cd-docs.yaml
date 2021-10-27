@@ -20,7 +20,7 @@ on:
 
 jobs:
 
-  wait-for-cd-ms-bff:
+  wait-for-deploy-k8s:
     runs-on: ubuntu-latest
     steps:
       - name: Wait for ms-bff CD to Succeed
@@ -28,7 +28,7 @@ jobs:
         id: wait-ms-cd
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: 'Deploy ms-bff'
+          checkName: 'deploy k8s'
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           timeoutSeconds: 600
           intervalSeconds: 10
@@ -41,7 +41,7 @@ jobs:
           exit 64
 
   build-and-deploy:
-    needs: wait-for-cd-ms-bff
+    needs: wait-for-deploy-k8s
     runs-on: ubuntu-latest
 
     steps:

@@ -64,9 +64,6 @@ jobs:
       # to enable act usage https://github.com/nektos/act
       - name: Install kubectl tooling
         run: |
-#          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-#          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-#          stick to 1.20 version, rather than latest one, to be compatible with IBM Cloud one
           curl -LO "https://dl.k8s.io/release/${K8S_VERSION}/bin/linux/amd64/kubectl"
           curl -LO "https://dl.k8s.io/${K8S_VERSION}/bin/linux/amd64/kubectl.sha256"
           echo "$(<kubectl.sha256) kubectl" | sha256sum --check

@@ -25,8 +25,7 @@ jobs:
   wait-for-ci:
     strategy:
       matrix:
-#        ms: [ ms-covid-data-loader, ms-population, ms-cloud-config, ms-covid, ms-bff ]
-        ms: [ ms-cloud-config ]
+        ms: [ ms-covid-data-loader, ms-population, ms-cloud-config, ms-covid, ms-bff ]
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Wait for ms-population CI to Succeed
@@ -100,74 +99,74 @@ jobs:
         run: |
           ./k8s/create-deploy-svc.sh
 
-#      - name: Deploy ms-population-postgres
-#        env:
-#          DEPLOYMENT_NAME: ms-population-postgres
-#          DOCKER_IMG: postgres:alpine
-#          SVC_PORT: 5432
-#          SVC_TYPE: clusterip
-#        run: |
-#          ./k8s/create-deploy-svc.sh
-#
-#      - name: Deploy ms-population
-#        env:
-#          DEPLOYMENT_NAME: ms-population
-#          DOCKER_IMG: msshowcase/ms-population:${{ github.sha }}
-#          SVC_PORT: 8080
-#          SVC_TYPE: clusterip
-#          LIVENESS_PROBE: "/q/health/live"
-#          READINESS_PROBE: "/q/health/ready"
-#        run: |
-#          ./k8s/create-deploy-svc.sh
-#
-#      - name: Deploy rabbitmq
-#        env:
-#          DEPLOYMENT_NAME: rabbitmq
-#          DOCKER_IMG: rabbitmq:3.8-management-alpine
-#          SVC_PORT: 5672
-#          SVC_TYPE: clusterip
-#        run: |
-#          ./k8s/create-deploy-svc.sh
-#          ./k8s/rabbitmq/create-rabbitmq-config.sh
-#
-#      - name: Deploy ms-covid-data-loader
-#        env:
-#          DEPLOYMENT_NAME: ms-covid-data-loader
-#          DOCKER_IMG: msshowcase/ms-covid-data-loader:${{ github.sha }}
-#        run: |
-#          ./k8s/create-cronjob.sh
-#
-#      - name: Deploy ms-covid-mongo
-#        env:
-#          DEPLOYMENT_NAME: ms-covid-mongo
-#          DOCKER_IMG: mongo
-#          SVC_PORT: 27017
-#          SVC_TYPE: clusterip
-#        run: |
-#          ./k8s/create-deploy-svc.sh
-#
-#      - name: Deploy ms-covid
-#        env:
-#          DEPLOYMENT_NAME: ms-covid
-#          DOCKER_IMG: msshowcase/ms-covid:${{ github.sha }}
-#          SVC_PORT: 8888
-#          SVC_TYPE: clusterip
-#          LIVENESS_PROBE: "/actuator/health/liveness"
-#          READINESS_PROBE: "/actuator/health/readiness"
-#        run: |
-#          ./k8s/create-deploy-svc.sh
-#
-#      - name: Deploy ms-bff
-#        env:
-#          DEPLOYMENT_NAME: ms-bff
-#          DOCKER_IMG: msshowcase/ms-bff:${{ github.sha }}
-#          SVC_PORT: 8888
-#          SVC_TYPE: nodeport
-#          SVC_NODEPORT: 31234
-#          LIVENESS_PROBE: "/actuator/health/liveness"
-#          READINESS_PROBE: "/actuator/health/readiness"
-#        run: |
-#          ./k8s/create-deploy-svc.sh
+      - name: Deploy ms-population-postgres
+        env:
+          DEPLOYMENT_NAME: ms-population-postgres
+          DOCKER_IMG: postgres:alpine
+          SVC_PORT: 5432
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-population
+        env:
+          DEPLOYMENT_NAME: ms-population
+          DOCKER_IMG: msshowcase/ms-population:${{ github.sha }}
+          SVC_PORT: 8080
+          SVC_TYPE: clusterip
+          LIVENESS_PROBE: "/q/health/live"
+          READINESS_PROBE: "/q/health/ready"
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy rabbitmq
+        env:
+          DEPLOYMENT_NAME: rabbitmq
+          DOCKER_IMG: rabbitmq:3.8-management-alpine
+          SVC_PORT: 5672
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+          ./k8s/rabbitmq/create-rabbitmq-config.sh
+
+      - name: Deploy ms-covid-data-loader
+        env:
+          DEPLOYMENT_NAME: ms-covid-data-loader
+          DOCKER_IMG: msshowcase/ms-covid-data-loader:${{ github.sha }}
+        run: |
+          ./k8s/create-cronjob.sh
+
+      - name: Deploy ms-covid-mongo
+        env:
+          DEPLOYMENT_NAME: ms-covid-mongo
+          DOCKER_IMG: mongo
+          SVC_PORT: 27017
+          SVC_TYPE: clusterip
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-covid
+        env:
+          DEPLOYMENT_NAME: ms-covid
+          DOCKER_IMG: msshowcase/ms-covid:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: clusterip
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
+        run: |
+          ./k8s/create-deploy-svc.sh
+
+      - name: Deploy ms-bff
+        env:
+          DEPLOYMENT_NAME: ms-bff
+          DOCKER_IMG: msshowcase/ms-bff:${{ github.sha }}
+          SVC_PORT: 8888
+          SVC_TYPE: nodeport
+          SVC_NODEPORT: 31234
+          LIVENESS_PROBE: "/actuator/health/liveness"
+          READINESS_PROBE: "/actuator/health/readiness"
+        run: |
+          ./k8s/create-deploy-svc.sh
 
       - name: k8s status
         run: |

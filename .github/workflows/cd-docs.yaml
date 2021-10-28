@@ -10,16 +10,38 @@ env:
 on:
   push:
     # no k8s cluster to push to => ignoring
-    branches-ignore:
-      - '**'
-#    branches:
-#      - master
-#  pull_request:
-#    branches:
-#      - master
+#    branches-ignore:
+#      - '**'
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
+
+  wait-for-deploy-k8s:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for ms-bff CD to Succeed
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-ms-cd
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: 'deploy k8s'
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          timeoutSeconds: 600
+          intervalSeconds: 10
+
+      - name: ms-population CI Failed
+        if: steps.wait-ms-cd.outputs.conclusion != 'success'
+        shell: bash
+        run: |
+          echo "Error! The ms-bff CD workflow has status of [${{steps.wait-ms-cd.outputs.conclusion}}]" 1>&2
+          exit 64
+
   build-and-deploy:
+    needs: wait-for-deploy-k8s
     runs-on: ubuntu-latest
 
     steps:

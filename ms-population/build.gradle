@@ -27,7 +27,7 @@ dependencies {
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
-    testImplementation 'org.testcontainers:testcontainers:1.16.2'
+    testImplementation 'org.testcontainers:testcontainers:1.17.0'
     testImplementation 'org.testcontainers:postgresql:1.16.2'
 }
 

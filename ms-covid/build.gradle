@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.12'
-    implementation 'io.swagger:swagger-annotations:1.6.3'
+    implementation 'io.swagger:swagger-annotations:1.6.9'
 
     // MapStruct
     implementation 'org.mapstruct:mapstruct-processor:1.4.2.Final'
